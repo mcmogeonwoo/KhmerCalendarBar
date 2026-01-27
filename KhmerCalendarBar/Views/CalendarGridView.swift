@@ -62,8 +62,8 @@ struct CalendarGridView: View {
     }
 
     private func weekdayHeaderColor(index: Int) -> Color {
-        if index == 0 { return theme.sunday.opacity(0.75) }
-        if index == 6 { return theme.saturday.opacity(0.65) }
-        return theme.accent.opacity(0.5)
+        if index == 0 { return theme.sunday }
+        if index == 6 { return theme.saturday }
+        return theme.accent.opacity(0.85)
     }
 }
