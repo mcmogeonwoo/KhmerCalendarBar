@@ -34,14 +34,23 @@ Or download the `.zip` from the [Releases](https://github.com/RithyTep/KhmerCale
 
 ### Install
 
-1. Open `KhmerCalendarBar.dmg`
-2. Drag **Khmer Calendar Bar** to your **Applications** folder
-3. On first launch, **right-click** the app → **Open** → click **Open** again
-4. The calendar icon appears in your menu bar
+**Step 1** — Open the DMG and drag to Applications:
+
+<div align="center">
+  <img src="docs/images/install-drag.png" alt="Drag to Applications" width="480">
+</div>
+
+**Step 2** — If macOS blocks the app, go to **System Settings → Privacy & Security** and click **Open Anyway**:
+
+<div align="center">
+  <img src="docs/images/install-privacy.png" alt="Privacy & Security — Open Anyway" width="480">
+</div>
+
+**Step 3** — The calendar icon appears in your menu bar. Done!
 
 > **Requires macOS 14.0 Sonoma or later** (Apple Silicon + Intel)
 >
-> The app is not notarized with Apple. Right-click → Open bypasses the Gatekeeper warning on first launch. After that it opens normally.
+> The app is not notarized with Apple. You only need to allow it once — after that it opens normally.
 
 ---
 
