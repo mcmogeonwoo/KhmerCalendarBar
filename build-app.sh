@@ -65,13 +65,18 @@ zip -r -q "${APP_NAME}.zip" "${APP_DIR}"
 
 echo "Creating DMG..."
 rm -f "${APP_NAME}.dmg"
-DMG_STAGING="dmg_staging"
-rm -rf "${DMG_STAGING}"
-mkdir -p "${DMG_STAGING}"
-cp -R "${APP_DIR}" "${DMG_STAGING}/"
-ln -s /Applications "${DMG_STAGING}/Applications"
-hdiutil create -volname "${APP_NAME}" -srcfolder "${DMG_STAGING}" -ov -format UDZO "${APP_NAME}.dmg"
-rm -rf "${DMG_STAGING}"
+create-dmg \
+    --volname "${APP_NAME}" \
+    --background "dmg-resources/background.png" \
+    --window-pos 200 120 \
+    --window-size 660 400 \
+    --icon-size 120 \
+    --icon "${APP_DIR}" 165 175 \
+    --app-drop-link 495 175 \
+    --text-size 14 \
+    --no-internet-enable \
+    "${APP_NAME}.dmg" \
+    "${APP_DIR}" || true
 
 echo ""
 echo "Done!"
