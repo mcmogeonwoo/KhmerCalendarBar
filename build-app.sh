@@ -25,6 +25,10 @@ fi
 # Copy app icon
 cp "${APP_NAME}/Resources/AppIcon.icns" "${APP_DIR}/Contents/Resources/AppIcon.icns"
 
+# Ad-hoc code sign (changes "damaged" to "unidentified developer" dialog)
+echo "Code signing (ad-hoc)..."
+codesign --force --deep --sign - "${APP_DIR}"
+
 # Create Info.plist
 cat > "${APP_DIR}/Contents/Info.plist" << 'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>

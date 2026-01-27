@@ -36,16 +36,12 @@ Or download the `.zip` from the [Releases](https://github.com/RithyTep/KhmerCale
 
 1. Open `KhmerCalendarBar.dmg`
 2. Drag **Khmer Calendar Bar** to your **Applications** folder
-3. If macOS says the app is "damaged", run in Terminal:
-   ```bash
-   xattr -cr /Applications/KhmerCalendarBar.app
-   ```
-4. Open from Applications or Spotlight
-5. The calendar icon appears in your menu bar
+3. On first launch, **right-click** the app → **Open** → click **Open** again
+4. The calendar icon appears in your menu bar
 
 > **Requires macOS 14.0 Sonoma or later** (Apple Silicon + Intel)
 >
-> The app is not notarized with Apple. The `xattr` command removes the quarantine flag so macOS allows it to run.
+> The app is not notarized with Apple. Right-click → Open bypasses the Gatekeeper warning on first launch. After that it opens normally.
 
 ---
 
