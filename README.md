@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/images/logo.png" alt="Khmer Calendar Bar" width="128">
+
 # Khmer Calendar Bar
 
 **A native macOS menu bar app for the Khmer Chhankitek lunisolar calendar.**
