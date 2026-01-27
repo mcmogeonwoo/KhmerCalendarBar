@@ -8,6 +8,7 @@ struct KhmerCalendarBarApp: App {
         MenuBarExtra {
             PopoverContentView(viewModel: viewModel)
                 .frame(width: 340)
+                .preferredColorScheme(.dark)
         } label: {
             Text(viewModel.menuBarText)
         }
