@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MonthNavigationView: View {
     @ObservedObject var viewModel: CalendarViewModel
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         HStack(spacing: 6) {
@@ -17,7 +18,7 @@ struct MonthNavigationView: View {
             VStack(spacing: 2) {
                 Text(khmerMonthYear)
                     .font(.system(size: 13, weight: .semibold))
-                    .foregroundStyle(CalendarTheme.accent)
+                    .foregroundStyle(theme.accent)
                     .lineLimit(1)
                 Text(gregorianMonthYear)
                     .font(.system(size: 9))
@@ -37,7 +38,7 @@ struct MonthNavigationView: View {
             }) {
                 Image(systemName: viewModel.isCurrentMonthDisplayed ? "calendar" : "calendar.circle.fill")
                     .font(.system(size: 13))
-                    .foregroundStyle(viewModel.isCurrentMonthDisplayed ? Color.secondary.opacity(0.4) : CalendarTheme.accent)
+                    .foregroundStyle(viewModel.isCurrentMonthDisplayed ? Color.secondary.opacity(0.4) : theme.accent)
                     .frame(width: 28, height: 28)
                     .contentShape(Rectangle())
             }
@@ -86,12 +87,13 @@ struct ScaleButtonStyle: ButtonStyle {
 private struct NavButton: View {
     let systemName: String
     let action: () -> Void
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         Button(action: action) {
             Image(systemName: systemName)
                 .font(.system(size: 12, weight: .medium))
-                .foregroundStyle(CalendarTheme.accent)
+                .foregroundStyle(theme.accent)
                 .frame(width: 28, height: 28)
                 .contentShape(Rectangle())
         }

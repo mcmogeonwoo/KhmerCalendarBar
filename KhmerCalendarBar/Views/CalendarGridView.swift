@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CalendarGridView: View {
     @ObservedObject var viewModel: CalendarViewModel
+    @Environment(\.calendarTheme) private var theme
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 3), count: 7)
 
@@ -61,8 +62,8 @@ struct CalendarGridView: View {
     }
 
     private func weekdayHeaderColor(index: Int) -> Color {
-        if index == 0 { return CalendarTheme.sunday.opacity(0.75) }
-        if index == 6 { return CalendarTheme.saturday.opacity(0.65) }
-        return CalendarTheme.accent.opacity(0.5)
+        if index == 0 { return theme.sunday.opacity(0.75) }
+        if index == 6 { return theme.saturday.opacity(0.65) }
+        return theme.accent.opacity(0.5)
     }
 }

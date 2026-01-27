@@ -4,6 +4,7 @@ struct DayCellView: View {
     let dayInfo: DayInfo
     let isSelected: Bool
     @State private var isHovered = false
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         VStack(spacing: 2) {
@@ -27,7 +28,7 @@ struct DayCellView: View {
                 HStack(spacing: 2) {
                     ForEach(0..<min(dayInfo.holidays.count, 3), id: \.self) { _ in
                         Circle()
-                            .fill(CalendarTheme.coral)
+                            .fill(theme.coral)
                             .frame(width: 4, height: 4)
                     }
                 }
@@ -62,28 +63,28 @@ struct DayCellView: View {
     }
 
     private var dayColor: Color {
-        if dayInfo.isToday { return .white }
-        if dayInfo.isPublicHoliday || dayInfo.isSunday { return CalendarTheme.sunday }
-        if dayInfo.isSaturday { return CalendarTheme.saturday }
+        if dayInfo.isToday { return theme.todayText }
+        if dayInfo.isPublicHoliday || dayInfo.isSunday { return theme.sunday }
+        if dayInfo.isSaturday { return theme.saturday }
         return .primary
     }
 
     private var khmerDayColor: Color {
-        if dayInfo.isToday { return .white.opacity(0.85) }
+        if dayInfo.isToday { return theme.todayText.opacity(0.85) }
         if dayInfo.isCurrentMonth { return .secondary }
         return Color.gray.opacity(0.4)
     }
 
     private var backgroundColor: Color {
-        if dayInfo.isToday { return CalendarTheme.accent }
-        if isSelected { return CalendarTheme.selectedBg }
-        if isHovered && dayInfo.isCurrentMonth { return CalendarTheme.hoverBg }
+        if dayInfo.isToday { return theme.accent }
+        if isSelected { return theme.selectedBg }
+        if isHovered && dayInfo.isCurrentMonth { return theme.hoverBg }
         return .clear
     }
 
     private var borderColor: Color {
-        if isSelected && !dayInfo.isToday { return CalendarTheme.selectedBorder }
-        if isHovered && dayInfo.isCurrentMonth && !dayInfo.isToday { return CalendarTheme.accent.opacity(0.15) }
+        if isSelected && !dayInfo.isToday { return theme.selectedBorder }
+        if isHovered && dayInfo.isCurrentMonth && !dayInfo.isToday { return theme.accent.opacity(0.15) }
         return .clear
     }
 

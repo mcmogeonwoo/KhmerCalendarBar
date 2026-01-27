@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KhmerCalendarBar — Khmer Calendar for macOS</title>
+    <meta name="description" content="A native macOS menu bar app for the Khmer Chhankitek lunisolar calendar.">
+    <meta property="og:title" content="KhmerCalendarBar — Khmer Calendar for macOS">
+    <meta property="og:description" content="The Khmer Lunar Calendar for your macOS menu bar.">
+    <meta property="og:image" content="images/preview.png">
+    <link rel="icon" type="image/png" href="images/logo.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0a0a;
+            color: #999;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+            background: rgba(10,10,10,0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-inner {
+            max-width: 980px; margin: 0 auto;
+            padding: 14px 24px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+        .nav-brand img { width: 28px; height: 28px; border-radius: 7px; }
+        .nav-brand span { font-size: 14px; font-weight: 600; color: #e5e5e5; letter-spacing: -0.3px; }
+        .nav-link {
+            font-size: 13px; color: #666; text-decoration: none;
+            padding: 6px 14px; border-radius: 6px;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: #ccc; }
+        .nav-btn {
+            font-size: 13px; font-weight: 500; color: #0a0a0a;
+            background: #e5e5e5; text-decoration: none;
+            padding: 7px 18px; border-radius: 100px;
+            transition: all 0.2s;
+        }
+        .nav-btn:hover { background: #fff; }
+
+        /* Hero */
+        .hero {
+            max-width: 980px; margin: 0 auto;
+            padding: 140px 24px 0;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: clamp(36px, 5.5vw, 56px);
+            font-weight: 600; color: #e5e5e5;
+            letter-spacing: -1.5px; line-height: 1.15;
+            margin-bottom: 16px;
+        }
+        .hero p {
+            font-size: 17px; line-height: 1.6;
+            color: #666; max-width: 440px; margin: 0 auto 36px;
+        }
+        .hero-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 12px; }
+        .btn-main {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px; border-radius: 100px;
+            font-size: 15px; font-weight: 500; text-decoration: none;
+            background: #e5e5e5; color: #0a0a0a;
+            transition: all 0.2s;
+        }
+        .btn-main:hover { background: #fff; transform: translateY(-1px); }
+        .btn-main svg { width: 16px; height: 16px; }
+        .btn-ghost {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px; border-radius: 100px;
+            font-size: 15px; font-weight: 500; text-decoration: none;
+            background: transparent; color: #888;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s;
+        }
+        .btn-ghost:hover { color: #ccc; border-color: rgba(255,255,255,0.2); }
+        .btn-ghost svg { width: 16px; height: 16px; }
+        .hero-meta { font-size: 12px; color: #444; }
+
+        /* Screenshot */
+        .screenshot-wrap {
+            max-width: 980px; margin: 64px auto 0;
+            display: flex; justify-content: center;
+            padding: 0 24px;
+        }
+        .screenshot-frame {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+        }
+        .screenshot-frame img {
+            display: block;
+            width: min(420px, 80vw);
+        }
+
+        /* Divider */
+        .divider {
+            max-width: 980px; margin: 0 auto;
+            padding: 0 24px;
+        }
+        .divider-line {
+            height: 1px;
+            background: rgba(255,255,255,0.05);
+            margin: 80px 0;
+        }
+
+        /* Features — simple two-column */
+        .features {
+            max-width: 720px; margin: 0 auto;
+            padding: 0 24px;
+        }
+        .features-header {
+            text-align: center; margin-bottom: 48px;
+        }
+        .features-header h2 {
+            font-size: 28px; font-weight: 600; color: #e5e5e5;
+            letter-spacing: -0.8px; margin-bottom: 10px;
+        }
+        .features-header p { font-size: 15px; color: #555; }
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px 48px;
+        }
+        .feature h3 {
+            font-size: 14px; font-weight: 600; color: #ccc;
+            margin-bottom: 6px;
+        }
+        .feature p {
+            font-size: 13px; color: #555; line-height: 1.6;
+        }
+
+        /* CTA */
+        .cta {
+            max-width: 720px; margin: 0 auto;
+            padding: 0 24px;
+            text-align: center;
+        }
+        .cta h2 {
+            font-size: 28px; font-weight: 600; color: #e5e5e5;
+            letter-spacing: -0.8px; margin-bottom: 10px;
+        }
+        .cta p { font-size: 15px; color: #555; margin-bottom: 32px; }
+        .cta-actions { display: flex; gap: 12px; justify-content: center; margin-bottom: 12px; }
+        .cta-meta { font-size: 12px; color: #444; }
+
+        /* Footer */
+        footer {
+            max-width: 980px; margin: 0 auto;
+            padding: 0 24px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 80px;
+        }
+        .footer-inner {
+            padding: 24px 0;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .footer-left {
+            font-size: 12px; color: #444;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .footer-left img { width: 16px; height: 16px; border-radius: 4px; opacity: 0.4; }
+        .footer-left a { color: #555; text-decoration: none; }
+        .footer-left a:hover { color: #999; }
+        .footer-links { display: flex; gap: 20px; }
+        .footer-links a { font-size: 12px; color: #444; text-decoration: none; }
+        .footer-links a:hover { color: #999; }
+
+        @media (max-width: 600px) {
+            .hero-actions { flex-direction: column; align-items: center; }
+            .features-grid { grid-template-columns: 1fr; gap: 24px; }
+            .cta-actions { flex-direction: column; align-items: center; }
+            .footer-inner { flex-direction: column; gap: 12px; }
+            .nav-link { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-brand">
+            <img src="images/logo.png" alt="KhmerCalendarBar">
+            <span>KhmerCalendarBar</span>
+        </a>
+        <div style="display:flex;align-items:center;gap:4px;">
+            <a href="#features" class="nav-link">Features</a>
+            <a href="https://github.com/RithyTep/KhmerCalendarBar" target="_blank" class="nav-link">GitHub</a>
+            <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/download/v1.1.0/KhmerCalendarBar.dmg" class="nav-btn">Download</a>
+        </div>
+    </div>
+</nav>
+
+<section class="hero">
+    <h1>Khmer Calendar<br>for your menu bar.</h1>
+    <p>Chhankitek lunar dates, public holidays, and Buddhist era — one click from your macOS menu bar.</p>
+    <div class="hero-actions">
+        <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/download/v1.1.0/KhmerCalendarBar.dmg" class="btn-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download for Mac
+        </a>
+        <a href="https://github.com/RithyTep/KhmerCalendarBar" target="_blank" class="btn-ghost">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            Source
+        </a>
+    </div>
+    <p class="hero-meta">macOS 14.0+ &middot; Apple Silicon + Intel &middot; Free &amp; open source</p>
+</section>
+
+<div class="screenshot-wrap">
+    <div class="screenshot-frame">
+        <img src="images/app-demo.png" alt="KhmerCalendarBar">
+    </div>
+</div>
+
+<div class="divider"><div class="divider-line"></div></div>
+
+<section id="features" class="features">
+    <div class="features-header">
+        <h2>What it does.</h2>
+        <p>Everything a Cambodian professional needs, nothing more.</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature">
+            <h3>Khmer lunar dates</h3>
+            <p>Gregorian to Chhankitek conversion with waxing and waning moon phases on every day.</p>
+        </div>
+        <div class="feature">
+            <h3>Public holidays</h3>
+            <p>All Cambodian holidays — fixed and lunar-computed. Countdown to the next one.</p>
+        </div>
+        <div class="feature">
+            <h3>Working day status</h3>
+            <p>See if today is a working day, weekend, or public holiday at a glance.</p>
+        </div>
+        <div class="feature">
+            <h3>Buddhist era</h3>
+            <p>Buddhist year, 12-year animal cycle, and Sak era displayed clearly.</p>
+        </div>
+        <div class="feature">
+            <h3>Keyboard navigation</h3>
+            <p>Arrow keys for months. T for today. Escape to deselect. No mouse needed.</p>
+        </div>
+        <div class="feature">
+            <h3>Native &amp; lightweight</h3>
+            <p>Built with SwiftUI. Instant launch, no battery drain, launches at login.</p>
+        </div>
+    </div>
+</section>
+
+<div class="divider"><div class="divider-line"></div></div>
+
+<section class="cta">
+    <h2>Try it free.</h2>
+    <p>Open source, lightweight, no account required.</p>
+    <div class="cta-actions">
+        <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/download/v1.1.0/KhmerCalendarBar.dmg" class="btn-main">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download DMG
+        </a>
+        <a href="https://github.com/RithyTep/KhmerCalendarBar" target="_blank" class="btn-ghost">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            View on GitHub
+        </a>
+    </div>
+    <p class="cta-meta">macOS 14.0 Sonoma or later &middot; MIT License</p>
+</section>
+
+<footer>
+    <div class="footer-inner">
+        <div class="footer-left">
+            <img src="images/logo.png" alt="">
+            Built by <a href="https://github.com/RithyTep" target="_blank">RithyTep</a>
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/RithyTep/KhmerCalendarBar" target="_blank">GitHub</a>
+            <a href="https://github.com/RithyTep/KhmerCalendarBar/releases" target="_blank">Releases</a>
+            <a href="https://github.com/RithyTep/KhmerCalendarBar/issues" target="_blank">Issues</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

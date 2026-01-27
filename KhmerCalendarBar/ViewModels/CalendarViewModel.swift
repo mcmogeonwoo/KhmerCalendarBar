@@ -13,6 +13,9 @@ final class CalendarViewModel: ObservableObject {
     @Published var monthHolidays: [KhmerHoliday] = []
     @Published var selectedDayInfo: DayInfo?
     @Published var navigationDirection: NavigationDirection = .none
+    @Published var viewMode: ViewMode = .month
+
+    enum ViewMode { case month, year }
 
     private let engine = ChhankitekEngine.shared
     private let calendar = Calendar.current
@@ -166,6 +169,51 @@ final class CalendarViewModel: ObservableObject {
         return "ថ្ងៃ" + CalendarConstants.weekdayNames[dow]
     }
 
+    // MARK: - Year Overview
+
+    struct MiniMonthData: Identifiable {
+        let id: Int
+        let name: String
+        let year: Int
+        let firstWeekday: Int
+        let totalDays: Int
+        let todayDay: Int?
+        let holidayDays: Set<Int>
+    }
+
+    func buildYearOverview() -> [MiniMonthData] {
+        let year = displayedYear
+        let holidays = HolidayService.holidays(forYear: year)
+        let now = Date()
+        let todayYear = calendar.component(.year, from: now)
+        let todayMonth = calendar.component(.month, from: now)
+        let todayDay = calendar.component(.day, from: now)
+
+        return (1...12).map { month in
+            let firstOfMonth = calendar.date(from: DateComponents(year: year, month: month, day: 1))!
+            let daysInMonth = calendar.range(of: .day, in: .month, for: firstOfMonth)!.count
+            let firstWeekday = calendar.component(.weekday, from: firstOfMonth)
+
+            let holidayDaysInMonth = Set(
+                holidays
+                    .filter { $0.month == month && $0.isPublicHoliday }
+                    .map(\.day)
+            )
+
+            let isThisMonth = todayYear == year && todayMonth == month
+
+            return MiniMonthData(
+                id: month,
+                name: CalendarConstants.solarMonthNames[month - 1],
+                year: year,
+                firstWeekday: firstWeekday,
+                totalDays: daysInMonth,
+                todayDay: isThisMonth ? todayDay : nil,
+                holidayDays: holidayDaysInMonth
+            )
+        }
+    }
+
     // MARK: - Private
 
     private func updateMenuBarText() {
@@ -194,7 +242,7 @@ final class CalendarViewModel: ObservableObject {
         }
     }
 
-    private func buildGrid() {
+    func buildGrid() {
         let firstOfMonth = calendar.date(from: DateComponents(
             year: displayedYear, month: displayedMonth, day: 1
         ))!

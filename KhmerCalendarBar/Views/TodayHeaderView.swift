@@ -2,6 +2,7 @@ import SwiftUI
 
 struct TodayHeaderView: View {
     @ObservedObject var viewModel: CalendarViewModel
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -21,7 +22,7 @@ struct TodayHeaderView: View {
             // Khmer lunar date
             Text("\(viewModel.todayKhmerDate.formattedDay) ខែ\(viewModel.todayKhmerDate.month.khmerName)")
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(CalendarTheme.accentLight)
+                .foregroundStyle(theme.accentLight)
 
             // Animal year + Buddhist era / Gregorian date
             HStack(spacing: 0) {
@@ -44,7 +45,7 @@ struct TodayHeaderView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "calendar.badge.clock")
                         .font(.system(size: 10))
-                        .foregroundStyle(CalendarTheme.amber)
+                        .foregroundStyle(theme.amber)
                     Text("បុណ្យបន្ទាប់:")
                         .font(.system(size: 10))
                         .foregroundStyle(.secondary)
@@ -55,7 +56,7 @@ struct TodayHeaderView: View {
                     Spacer()
                     Text("\(KhmerNumeralService.toKhmer(days)) ថ្ងៃទៀត")
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
-                        .foregroundStyle(CalendarTheme.amber)
+                        .foregroundStyle(theme.amber)
                 }
             }
         }
@@ -67,7 +68,7 @@ struct TodayHeaderView: View {
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(CalendarTheme.accent.opacity(0.15), lineWidth: 0.5)
+                .strokeBorder(theme.accent.opacity(0.15), lineWidth: 0.5)
         )
     }
 }
@@ -77,13 +78,14 @@ struct TodayHeaderView: View {
 private struct StatusBadge: View {
     let text: String
     let isWorking: Bool
+    @Environment(\.calendarTheme) private var theme
 
     private var color: Color {
-        isWorking ? CalendarTheme.working : CalendarTheme.coral
+        isWorking ? theme.working : theme.coral
     }
 
     private var bgColor: Color {
-        isWorking ? CalendarTheme.workingMuted : CalendarTheme.coralMuted
+        isWorking ? theme.workingMuted : theme.coralMuted
     }
 
     var body: some View {

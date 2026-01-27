@@ -2,47 +2,76 @@ import SwiftUI
 
 struct PopoverContentView: View {
     @ObservedObject var viewModel: CalendarViewModel
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var theme: CalendarTheme { CalendarTheme(colorScheme: colorScheme) }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Today Header
-            TodayHeaderView(viewModel: viewModel)
-                .padding(.horizontal, 8)
-                .padding(.bottom, 10)
+            // Today Header + View Toggle
+            HStack(alignment: .top, spacing: 6) {
+                TodayHeaderView(viewModel: viewModel)
+
+                Button {
+                    withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                        viewModel.viewMode = viewModel.viewMode == .month ? .year : .month
+                    }
+                } label: {
+                    Image(systemName: viewModel.viewMode == .month ? "square.grid.3x3" : "calendar")
+                        .font(.system(size: 11))
+                        .foregroundStyle(theme.accent)
+                        .frame(width: 26, height: 26)
+                        .background(
+                            RoundedRectangle(cornerRadius: 6)
+                                .fill(theme.accentMuted)
+                        )
+                }
+                .buttonStyle(ScaleButtonStyle())
+                .help(viewModel.viewMode == .month ? "ទិដ្ឋភាពឆ្នាំ (Y)" : "ទិដ្ឋភាពខែ (Y)")
+            }
+            .padding(.horizontal, 8)
+            .padding(.bottom, 10)
 
             Divider()
                 .padding(.horizontal, 8)
 
-            // Month Navigation
-            MonthNavigationView(viewModel: viewModel)
-                .padding(.horizontal, 8)
-                .padding(.vertical, 8)
+            if viewModel.viewMode == .month {
+                // Month Navigation
+                MonthNavigationView(viewModel: viewModel)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 8)
 
-            // Calendar Grid
-            CalendarGridView(viewModel: viewModel)
-                .padding(.horizontal, 8)
+                // Calendar Grid
+                CalendarGridView(viewModel: viewModel)
+                    .padding(.horizontal, 8)
 
-            // Selected Day Detail
-            if let selected = viewModel.selectedDayInfo {
-                SelectedDayDetailView(dayInfo: selected)
+                // Selected Day Detail
+                if let selected = viewModel.selectedDayInfo {
+                    SelectedDayDetailView(dayInfo: selected)
+                        .padding(.horizontal, 8)
+                        .padding(.top, 8)
+                        .transition(
+                            .asymmetric(
+                                insertion: .scale(scale: 0.95).combined(with: .opacity),
+                                removal: .scale(scale: 0.95).combined(with: .opacity)
+                            )
+                        )
+                }
+
+                Divider()
                     .padding(.horizontal, 8)
                     .padding(.top, 8)
-                    .transition(
-                        .asymmetric(
-                            insertion: .scale(scale: 0.95).combined(with: .opacity),
-                            removal: .scale(scale: 0.95).combined(with: .opacity)
-                        )
-                    )
+
+                // Holiday List
+                HolidayListView(holidays: viewModel.monthHolidays)
+                    .padding(.horizontal, 8)
+                    .padding(.top, 8)
+            } else {
+                // Year Overview
+                YearOverviewView(viewModel: viewModel)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 8)
             }
-
-            Divider()
-                .padding(.horizontal, 8)
-                .padding(.top, 8)
-
-            // Holiday List
-            HolidayListView(holidays: viewModel.monthHolidays)
-                .padding(.horizontal, 8)
-                .padding(.top, 8)
 
             Divider()
                 .padding(.horizontal, 8)
@@ -54,6 +83,7 @@ struct PopoverContentView: View {
                 .padding(.vertical, 8)
         }
         .padding(8)
+        .environment(\.calendarTheme, CalendarTheme(colorScheme: colorScheme))
         .animation(.spring(response: 0.3, dampingFraction: 0.85), value: viewModel.selectedDayInfo?.id)
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.monthKey)
         .onAppear {
@@ -80,7 +110,17 @@ struct PopoverContentView: View {
         }
         .onKeyPress(.escape) {
             withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
-                viewModel.selectedDayInfo = nil
+                if viewModel.viewMode == .year {
+                    viewModel.viewMode = .month
+                } else {
+                    viewModel.selectedDayInfo = nil
+                }
+            }
+            return .handled
+        }
+        .onKeyPress(characters: CharacterSet(charactersIn: "yY")) { _ in
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                viewModel.viewMode = viewModel.viewMode == .month ? .year : .month
             }
             return .handled
         }
@@ -91,6 +131,7 @@ struct PopoverContentView: View {
 
 struct SelectedDayDetailView: View {
     let dayInfo: DayInfo
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         VStack(alignment: .leading, spacing: 5) {
@@ -103,11 +144,11 @@ struct SelectedDayDetailView: View {
                 Spacer()
 
                 if dayInfo.isPublicHoliday {
-                    DayStatusPill(text: "ថ្ងៃឈប់សម្រាក", color: CalendarTheme.coral, bgColor: CalendarTheme.coralMuted)
+                    DayStatusPill(text: "ថ្ងៃឈប់សម្រាក", color: theme.coral, bgColor: theme.coralMuted)
                 } else if dayInfo.isWeekend {
-                    DayStatusPill(text: "ចុងសប្តាហ៍", color: CalendarTheme.weekend, bgColor: CalendarTheme.weekendMuted)
+                    DayStatusPill(text: "ចុងសប្តាហ៍", color: theme.weekend, bgColor: theme.weekendMuted)
                 } else {
-                    DayStatusPill(text: "ថ្ងៃធ្វើការ", color: CalendarTheme.working, bgColor: CalendarTheme.workingMuted)
+                    DayStatusPill(text: "ថ្ងៃធ្វើការ", color: theme.working, bgColor: theme.workingMuted)
                 }
             }
 
@@ -123,11 +164,11 @@ struct SelectedDayDetailView: View {
                 ForEach(dayInfo.holidays) { holiday in
                     HStack(spacing: 5) {
                         Circle()
-                            .fill(holiday.isPublicHoliday ? CalendarTheme.coral : CalendarTheme.amber)
+                            .fill(holiday.isPublicHoliday ? theme.coral : theme.amber)
                             .frame(width: 5, height: 5)
                         Text(holiday.khmerName)
                             .font(.system(size: 10, weight: .medium))
-                            .foregroundStyle(holiday.isPublicHoliday ? CalendarTheme.coral : .primary)
+                            .foregroundStyle(holiday.isPublicHoliday ? theme.coral : .primary)
                         if !holiday.englishName.isEmpty {
                             Text("(\(holiday.englishName))")
                                 .font(.system(size: 9))
@@ -141,11 +182,11 @@ struct SelectedDayDetailView: View {
         .padding(10)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(CalendarTheme.accent.opacity(0.05))
+                .fill(theme.accent.opacity(0.05))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .strokeBorder(CalendarTheme.accent.opacity(0.12), lineWidth: 0.5)
+                .strokeBorder(theme.accent.opacity(0.12), lineWidth: 0.5)
         )
     }
 
@@ -177,6 +218,7 @@ private struct DayStatusPill: View {
 
 struct MonthlySummaryView: View {
     @ObservedObject var viewModel: CalendarViewModel
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         HStack(spacing: 8) {
@@ -184,24 +226,24 @@ struct MonthlySummaryView: View {
                 icon: "briefcase.fill",
                 label: "ថ្ងៃធ្វើការ",
                 value: KhmerNumeralService.toKhmer(viewModel.workingDaysCount),
-                color: CalendarTheme.working,
-                bgColor: CalendarTheme.workingMuted
+                color: theme.working,
+                bgColor: theme.workingMuted
             )
 
             SummaryBadge(
                 icon: "star.fill",
                 label: "ថ្ងៃបុណ្យ",
                 value: KhmerNumeralService.toKhmer(viewModel.publicHolidayDaysCount),
-                color: CalendarTheme.coral,
-                bgColor: CalendarTheme.coralMuted
+                color: theme.coral,
+                bgColor: theme.coralMuted
             )
 
             SummaryBadge(
                 icon: "sun.max.fill",
                 label: "ចុងសប្តាហ៍",
                 value: KhmerNumeralService.toKhmer(viewModel.weekendDaysCount),
-                color: CalendarTheme.amber,
-                bgColor: CalendarTheme.amberMuted
+                color: theme.amber,
+                bgColor: theme.amberMuted
             )
         }
     }

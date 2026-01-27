@@ -11,7 +11,7 @@
 [![SwiftUI](https://img.shields.io/badge/SwiftUI-Framework-007AFF?logo=swift&logoColor=white)](https://developer.apple.com/swiftui/)
 [![License](https://img.shields.io/badge/License-MIT-2E9494)](LICENSE)
 
-[Download DMG](#download) | [Build from Source](#build-from-source) | [Features](#features)
+[Website](https://khmercalendarbar.rithytep.online/) | [Download DMG](#download) | [Build from Source](#build-from-source) | [Features](#features)
 
 </div>
 
@@ -61,12 +61,14 @@ Or download the `.zip` from the [Releases](https://github.com/RithyTep/KhmerCale
 - **Next holiday countdown** — Shows upcoming holiday with days remaining
 
 ### UX
+- **Light / Dark mode** — Automatically adapts to macOS system appearance
+- **Year overview** — 4x3 mini-month grid with holiday highlights, tap to navigate
 - **Working day status** — "ថ្ងៃធ្វើការ" / "ថ្ងៃឈប់សម្រាក" / "ចុងសប្តាហ៍" badge
-- **Modern Dark Teal theme** — Custom color palette (teal, coral, amber)
+- **Modern Teal theme** — Custom color palette (teal, coral, amber) adaptive to light/dark
 - **Spring animations** — Smooth month navigation, hover effects, scale transitions
 - **Month slide transitions** — Directional left/right animation when navigating
 - **Day cell hover** — Interactive scale effect on mouseover
-- **Keyboard shortcuts** — Arrow keys (month), T (today), Escape (deselect)
+- **Keyboard shortcuts** — Arrow keys (month), T (today), Y (year overview), Escape (deselect/back)
 - **Launch at Login** — Auto-start on macOS boot
 - **Midnight refresh** — Automatically updates at midnight
 - **Holiday notifications** — macOS notifications for upcoming holidays
@@ -115,7 +117,7 @@ KhmerCalendarBar/
 │   ├── KhmerHoliday.swift        # Holiday model
 │   ├── DayInfo.swift             # Combined day info for grid
 │   ├── CalendarConstants.swift   # Khmer Unicode strings
-│   └── CalendarTheme.swift       # Modern Dark Teal color palette
+│   └── CalendarTheme.swift       # Adaptive theme (light/dark mode)
 ├── Engine/
 │   ├── ChhankitekEngine.swift    # Main Gregorian ↔ Khmer conversion
 │   ├── AstronomicalCalculations  # Aharkun, Bodethey, Avoman
@@ -137,6 +139,7 @@ KhmerCalendarBar/
 │   ├── CalendarGridView          # 7-column animated grid
 │   ├── DayCellView               # Day cell with hover effects
 │   ├── HolidayListView           # Monthly holidays with dates
+│   ├── YearOverviewView          # 4x3 year overview grid
 │   └── FooterView                # Launch at Login, Quit
 └── Utilities/
     ├── LaunchAtLogin              # SMAppService wrapper
@@ -168,5 +171,5 @@ Contributions are welcome! Please open an issue or submit a pull request.
 ---
 
 <div align="center">
-  <sub>Built with SwiftUI for macOS by <a href="https://github.com/RithyTep">RithyTep</a></sub>
+  <sub>Built with SwiftUI for macOS by <a href="https://github.com/RithyTep">RithyTep</a> | <a href="https://khmercalendarbar.rithytep.online/">khmercalendarbar.rithytep.online</a></sub>
 </div>

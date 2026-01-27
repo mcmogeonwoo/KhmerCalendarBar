@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HolidayListView: View {
     let holidays: [KhmerHoliday]
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         if holidays.isEmpty {
@@ -16,16 +17,16 @@ struct HolidayListView: View {
                 HStack(spacing: 5) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 9))
-                        .foregroundStyle(CalendarTheme.amber)
+                        .foregroundStyle(theme.amber)
                     Text("បុណ្យក្នុងខែនេះ")
                         .font(.system(size: 10, weight: .semibold))
                         .foregroundStyle(.secondary)
                     Text("\(uniqueHolidays.count)")
                         .font(.system(size: 9, weight: .bold, design: .rounded))
-                        .foregroundStyle(CalendarTheme.amber)
+                        .foregroundStyle(theme.amber)
                         .padding(.horizontal, 5)
                         .padding(.vertical, 1)
-                        .background(Capsule().fill(CalendarTheme.amberMuted))
+                        .background(Capsule().fill(theme.amberMuted))
                     Spacer()
                 }
 
@@ -72,13 +73,14 @@ struct HolidayListView: View {
 private struct HolidayRow: View {
     let holiday: KhmerHoliday
     let isPassed: Bool
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         HStack(spacing: 6) {
             // Date badge
             Text(holiday.formattedDate)
                 .font(.system(size: 9, weight: .medium, design: .monospaced))
-                .foregroundStyle(isPassed ? Color.secondary.opacity(0.4) : CalendarTheme.accent)
+                .foregroundStyle(isPassed ? Color.secondary.opacity(0.4) : theme.accent)
                 .frame(width: 38, alignment: .leading)
 
             Circle()
@@ -104,6 +106,6 @@ private struct HolidayRow: View {
 
     private var dotColor: Color {
         if isPassed { return .gray.opacity(0.5) }
-        return holiday.isPublicHoliday ? CalendarTheme.coral : CalendarTheme.amber
+        return holiday.isPublicHoliday ? theme.coral : theme.amber
     }
 }
