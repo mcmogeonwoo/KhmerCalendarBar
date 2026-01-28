@@ -3,105 +3,64 @@ import SwiftUI
 struct PopoverContentView: View {
     @ObservedObject var viewModel: CalendarViewModel
     @Environment(\.colorScheme) private var colorScheme
+    @State private var showSettings = false
 
     private var theme: CalendarTheme { CalendarTheme(colorScheme: colorScheme) }
 
     var body: some View {
         VStack(spacing: 0) {
-            // Today Header + View Toggle
-            HStack(alignment: .top, spacing: 6) {
-                TodayHeaderView(viewModel: viewModel)
-
-                Button {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
-                        viewModel.viewMode = viewModel.viewMode == .month ? .year : .month
+            if viewModel.showAddReminder, let targetDay = viewModel.reminderTargetDay {
+                AddReminderView(
+                    dayInfo: targetDay,
+                    onSave: { reminder in
+                        viewModel.addReminder(reminder)
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                            viewModel.showAddReminder = false
+                            viewModel.reminderTargetDay = nil
+                        }
+                    },
+                    onCancel: {
+                        withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                            viewModel.showAddReminder = false
+                            viewModel.reminderTargetDay = nil
+                        }
                     }
-                } label: {
-                    Image(systemName: viewModel.viewMode == .month ? "square.grid.3x3" : "calendar")
-                        .font(.system(size: 11))
-                        .foregroundStyle(theme.accent)
-                        .frame(width: 26, height: 26)
-                        .background(
-                            RoundedRectangle(cornerRadius: 6)
-                                .fill(theme.accentMuted)
-                        )
-                }
-                .buttonStyle(ScaleButtonStyle())
-                .help(viewModel.viewMode == .month ? "ទិដ្ឋភាពឆ្នាំ (Y)" : "ទិដ្ឋភាពខែ (Y)")
-            }
-            .padding(.horizontal, 8)
-            .padding(.bottom, 10)
-
-            Divider()
-                .padding(.horizontal, 8)
-
-            if viewModel.viewMode == .month {
-                // Month Navigation
-                MonthNavigationView(viewModel: viewModel)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 8)
-
-                // Calendar Grid
-                CalendarGridView(viewModel: viewModel)
-                    .padding(.horizontal, 8)
-
-                // Selected Day Detail
-                if let selected = viewModel.selectedDayInfo {
-                    SelectedDayDetailView(dayInfo: selected)
-                        .padding(.horizontal, 8)
-                        .padding(.top, 8)
-                        .transition(
-                            .asymmetric(
-                                insertion: .scale(scale: 0.95).combined(with: .opacity),
-                                removal: .scale(scale: 0.95).combined(with: .opacity)
-                            )
-                        )
-                }
-
-                Divider()
-                    .padding(.horizontal, 8)
-                    .padding(.top, 8)
-
-                // Holiday List
-                HolidayListView(holidays: viewModel.monthHolidays)
-                    .padding(.horizontal, 8)
-                    .padding(.top, 8)
+                )
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+            } else if showSettings {
+                SettingsView(showSettings: $showSettings, viewModel: viewModel)
+                    .transition(.move(edge: .trailing).combined(with: .opacity))
             } else {
-                // Year Overview
-                YearOverviewView(viewModel: viewModel)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 8)
+                mainContent
+                    .transition(.move(edge: .leading).combined(with: .opacity))
             }
-
-            Divider()
-                .padding(.horizontal, 8)
-                .padding(.top, 8)
-
-            // Footer
-            FooterView()
-                .padding(.horizontal, 8)
-                .padding(.vertical, 8)
         }
         .padding(8)
         .environment(\.calendarTheme, CalendarTheme(colorScheme: colorScheme))
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: showSettings)
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.showAddReminder)
         .animation(.spring(response: 0.3, dampingFraction: 0.85), value: viewModel.selectedDayInfo?.id)
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.monthKey)
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.viewMode)
         .onAppear {
             viewModel.goToToday()
         }
         .onKeyPress(.leftArrow) {
+            guard !showSettings else { return .ignored }
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 viewModel.navigateMonth(offset: -1)
             }
             return .handled
         }
         .onKeyPress(.rightArrow) {
+            guard !showSettings else { return .ignored }
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 viewModel.navigateMonth(offset: 1)
             }
             return .handled
         }
         .onKeyPress(characters: CharacterSet(charactersIn: "tT")) { _ in
+            guard !showSettings else { return .ignored }
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 viewModel.goToToday()
                 viewModel.selectedDayInfo = nil
@@ -110,7 +69,12 @@ struct PopoverContentView: View {
         }
         .onKeyPress(.escape) {
             withAnimation(.spring(response: 0.25, dampingFraction: 0.8)) {
-                if viewModel.viewMode == .year {
+                if viewModel.showAddReminder {
+                    viewModel.showAddReminder = false
+                    viewModel.reminderTargetDay = nil
+                } else if showSettings {
+                    showSettings = false
+                } else if viewModel.viewMode == .year {
                     viewModel.viewMode = .month
                 } else {
                     viewModel.selectedDayInfo = nil
@@ -119,11 +83,91 @@ struct PopoverContentView: View {
             return .handled
         }
         .onKeyPress(characters: CharacterSet(charactersIn: "yY")) { _ in
+            guard !showSettings else { return .ignored }
             withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
                 viewModel.viewMode = viewModel.viewMode == .month ? .year : .month
             }
             return .handled
         }
+    }
+
+    @ViewBuilder
+    private var mainContent: some View {
+        // Today Header + View Toggle
+        HStack(alignment: .top, spacing: 6) {
+            TodayHeaderView(viewModel: viewModel)
+
+            Button {
+                withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
+                    viewModel.viewMode = viewModel.viewMode == .month ? .year : .month
+                }
+            } label: {
+                Image(systemName: viewModel.viewMode == .month ? "square.grid.3x3" : "calendar")
+                    .font(.system(size: 11))
+                    .foregroundStyle(theme.accent)
+                    .frame(width: 26, height: 26)
+                    .background(
+                        RoundedRectangle(cornerRadius: 6)
+                            .fill(theme.accentMuted)
+                    )
+            }
+            .buttonStyle(ScaleButtonStyle())
+            .help(viewModel.viewMode == .month ? "ទិដ្ឋភាពឆ្នាំ (Y)" : "ទិដ្ឋភាពខែ (Y)")
+        }
+        .padding(.horizontal, 8)
+        .padding(.bottom, 10)
+
+        Divider()
+            .padding(.horizontal, 8)
+
+        if viewModel.viewMode == .month {
+            // Month Navigation
+            MonthNavigationView(viewModel: viewModel)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 8)
+
+            // Calendar Grid
+            CalendarGridView(viewModel: viewModel)
+                .padding(.horizontal, 8)
+
+            // Selected Day Detail
+            if let selected = viewModel.selectedDayInfo {
+                SelectedDayDetailView(dayInfo: selected)
+                    .padding(.horizontal, 8)
+                    .padding(.top, 8)
+                    .transition(
+                        .asymmetric(
+                            insertion: .scale(scale: 0.95).combined(with: .opacity),
+                            removal: .scale(scale: 0.95).combined(with: .opacity)
+                        )
+                    )
+            }
+
+            Divider()
+                .padding(.horizontal, 8)
+                .padding(.top, 8)
+
+            // Holiday List
+            HolidayListView(holidays: viewModel.monthHolidays)
+                .padding(.horizontal, 8)
+                .padding(.top, 8)
+                .transition(.scale(scale: 0.95).combined(with: .opacity))
+        } else {
+            // Year Overview
+            YearOverviewView(viewModel: viewModel)
+                .padding(.horizontal, 8)
+                .padding(.vertical, 8)
+                .transition(.scale(scale: 1.05).combined(with: .opacity))
+        }
+
+        Divider()
+            .padding(.horizontal, 8)
+            .padding(.top, 8)
+
+        // Footer
+        FooterView(showSettings: $showSettings)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 8)
     }
 }
 

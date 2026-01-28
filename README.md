@@ -18,8 +18,12 @@
 ---
 
 <div align="center">
-  <img src="docs/images/preview.png" alt="Khmer Calendar Bar Preview" width="520">
-  <p><em>Modern Dark Teal theme with Khmer lunar dates, public holidays, and working day status</em></p>
+  <img src="docs/images/screenshot-month.png" alt="Month View" width="260">
+  <img src="docs/images/screenshot-year.png" alt="Year Overview" width="260">
+  <img src="docs/images/screenshot-settings.png" alt="Settings" width="260">
+  <br><br>
+  <img src="docs/images/screenshot-menubar.png" alt="Menu Bar Integration" width="520">
+  <p><em>Month view, year overview, settings, and menu bar integration</em></p>
 </div>
 
 ---

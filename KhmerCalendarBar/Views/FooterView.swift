@@ -1,18 +1,30 @@
 import SwiftUI
 
 struct FooterView: View {
-    @State private var launchAtLogin = LaunchAtLoginHelper.isEnabled
+    @Binding var showSettings: Bool
     @State private var isQuitHovered = false
+    @State private var isSettingsHovered = false
+    @Environment(\.calendarTheme) private var theme
 
     var body: some View {
         HStack {
-            Toggle("Launch at Login", isOn: $launchAtLogin)
-                .toggleStyle(.switch)
-                .controlSize(.mini)
-                .font(.caption)
-                .onChange(of: launchAtLogin) { _, newValue in
-                    LaunchAtLoginHelper.setEnabled(newValue)
+            Button {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                    showSettings = true
                 }
+            } label: {
+                Image(systemName: "gearshape.fill")
+                    .font(.system(size: 12))
+                    .foregroundStyle(isSettingsHovered ? AnyShapeStyle(theme.accent) : AnyShapeStyle(.tertiary))
+                    .frame(width: 24, height: 24)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .onHover { hovering in
+                isSettingsHovered = hovering
+            }
+            .animation(.easeInOut(duration: 0.15), value: isSettingsHovered)
+            .help("ការកំណត់")
 
             Spacer()
 

@@ -88,11 +88,20 @@
         .btn-ghost svg { width: 16px; height: 16px; }
         .hero-meta { font-size: 12px; color: #444; }
 
-        /* Screenshot */
+        /* Hero Logo */
+        .hero-logo {
+            width: 96px; height: 96px;
+            border-radius: 22px;
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        }
+
+        /* Screenshot Gallery */
         .screenshot-wrap {
             max-width: 980px; margin: 64px auto 0;
-            display: flex; justify-content: center;
+            display: flex; justify-content: center; gap: 20px;
             padding: 0 24px;
+            flex-wrap: wrap;
         }
         .screenshot-frame {
             position: relative;
@@ -103,7 +112,30 @@
         }
         .screenshot-frame img {
             display: block;
-            width: min(420px, 80vw);
+            width: min(280px, 70vw);
+        }
+        .screenshot-frame.main img {
+            width: min(320px, 80vw);
+        }
+        .screenshot-label {
+            text-align: center;
+            font-size: 12px;
+            color: #555;
+            margin-top: 12px;
+        }
+        .screenshot-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        /* Desktop full screenshot */
+        .screenshot-full {
+            max-width: 980px; margin: 32px auto 0;
+            display: flex; justify-content: center;
+            padding: 0 24px;
+        }
+        .screenshot-full .screenshot-frame img {
+            width: min(720px, 90vw);
         }
 
         /* Divider */
@@ -199,16 +231,17 @@
         <div style="display:flex;align-items:center;gap:4px;">
             <a href="#features" class="nav-link">Features</a>
             <a href="https://github.com/RithyTep/KhmerCalendarBar" target="_blank" class="nav-link">GitHub</a>
-            <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/download/v1.1.0/KhmerCalendarBar.dmg" class="nav-btn">Download</a>
+            <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/latest/download/KhmerCalendarBar.dmg" class="nav-btn">Download</a>
         </div>
     </div>
 </nav>
 
 <section class="hero">
+    <img src="images/logo.png" alt="KhmerCalendarBar" class="hero-logo">
     <h1>Khmer Calendar<br>for your menu bar.</h1>
     <p>Chhankitek lunar dates, public holidays, and Buddhist era — one click from your macOS menu bar.</p>
     <div class="hero-actions">
-        <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/download/v1.1.0/KhmerCalendarBar.dmg" class="btn-main">
+        <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/latest/download/KhmerCalendarBar.dmg" class="btn-main">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download for Mac
         </a>
@@ -221,8 +254,29 @@
 </section>
 
 <div class="screenshot-wrap">
+    <div class="screenshot-col">
+        <div class="screenshot-frame main">
+            <img src="images/screenshot-month.png" alt="Month View">
+        </div>
+        <p class="screenshot-label">Month View</p>
+    </div>
+    <div class="screenshot-col">
+        <div class="screenshot-frame">
+            <img src="images/screenshot-year.png" alt="Year Overview">
+        </div>
+        <p class="screenshot-label">Year Overview</p>
+    </div>
+    <div class="screenshot-col">
+        <div class="screenshot-frame">
+            <img src="images/screenshot-settings.png" alt="Settings">
+        </div>
+        <p class="screenshot-label">Settings</p>
+    </div>
+</div>
+
+<div class="screenshot-full">
     <div class="screenshot-frame">
-        <img src="images/app-demo.png" alt="KhmerCalendarBar">
+        <img src="images/screenshot-menubar.png" alt="Menu Bar Integration">
     </div>
 </div>
 
@@ -251,8 +305,24 @@
             <p>Buddhist year, 12-year animal cycle, and Sak era displayed clearly.</p>
         </div>
         <div class="feature">
+            <h3>Custom reminders</h3>
+            <p>Set reminders on any date. Get notified at the time you choose.</p>
+        </div>
+        <div class="feature">
+            <h3>Menu bar formats</h3>
+            <p>Choose Khmer numeral, dual format, lunar date, full Khmer, or icon only.</p>
+        </div>
+        <div class="feature">
+            <h3>Right-click to copy</h3>
+            <p>Copy Khmer dates, Gregorian dates, holidays, or full info to clipboard.</p>
+        </div>
+        <div class="feature">
             <h3>Keyboard navigation</h3>
-            <p>Arrow keys for months. T for today. Escape to deselect. No mouse needed.</p>
+            <p>Arrow keys for months. T for today. Y for year view. Escape to go back.</p>
+        </div>
+        <div class="feature">
+            <h3>Settings</h3>
+            <p>Configure menu bar format, notifications, reminders, and launch at login.</p>
         </div>
         <div class="feature">
             <h3>Native &amp; lightweight</h3>
@@ -267,7 +337,7 @@
     <h2>Try it free.</h2>
     <p>Open source, lightweight, no account required.</p>
     <div class="cta-actions">
-        <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/download/v1.1.0/KhmerCalendarBar.dmg" class="btn-main">
+        <a href="https://github.com/RithyTep/KhmerCalendarBar/releases/latest/download/KhmerCalendarBar.dmg" class="btn-main">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download DMG
         </a>

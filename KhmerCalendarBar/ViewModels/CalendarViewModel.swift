@@ -14,6 +14,9 @@ final class CalendarViewModel: ObservableObject {
     @Published var selectedDayInfo: DayInfo?
     @Published var navigationDirection: NavigationDirection = .none
     @Published var viewMode: ViewMode = .month
+    @Published var showAddReminder = false
+    @Published var reminderTargetDay: DayInfo?
+    @Published var reminders: [Reminder] = []
 
     enum ViewMode { case month, year }
 
@@ -21,6 +24,7 @@ final class CalendarViewModel: ObservableObject {
     private let calendar = Calendar.current
     private var midnightTimer: Timer?
     private var lastNotificationYear: Int?
+    private var settingsObserver: Any?
 
     enum NavigationDirection {
         case forward, backward, none
@@ -41,6 +45,8 @@ final class CalendarViewModel: ObservableObject {
         buildGrid()
         scheduleMidnightRefresh()
         setupNotifications(year: year)
+        observeSettingsChanges()
+        loadReminders()
     }
 
     func navigateMonth(offset: Int) {
@@ -169,6 +175,46 @@ final class CalendarViewModel: ObservableObject {
         return "ថ្ងៃ" + CalendarConstants.weekdayNames[dow]
     }
 
+    // MARK: - Reminders
+
+    func loadReminders() {
+        reminders = ReminderStorage.shared.loadAll()
+    }
+
+    func addReminder(_ reminder: Reminder) {
+        ReminderStorage.shared.add(reminder)
+        reminders = ReminderStorage.shared.loadAll()
+        Task {
+            await NotificationService.shared.scheduleReminderNotification(reminder)
+        }
+    }
+
+    func deleteReminder(id: UUID) {
+        NotificationService.shared.cancelReminderNotification(id: id)
+        ReminderStorage.shared.remove(id: id)
+        reminders = ReminderStorage.shared.loadAll()
+    }
+
+    func toggleReminder(_ reminder: Reminder) {
+        var updated = reminder
+        updated.isEnabled.toggle()
+        ReminderStorage.shared.update(updated)
+        reminders = ReminderStorage.shared.loadAll()
+
+        if updated.isEnabled {
+            Task {
+                await NotificationService.shared.scheduleReminderNotification(updated)
+            }
+        } else {
+            NotificationService.shared.cancelReminderNotification(id: updated.id)
+        }
+    }
+
+    func openAddReminder(for dayInfo: DayInfo) {
+        reminderTargetDay = dayInfo
+        showAddReminder = true
+    }
+
     // MARK: - Year Overview
 
     struct MiniMonthData: Identifiable {
@@ -218,8 +264,37 @@ final class CalendarViewModel: ObservableObject {
 
     private func updateMenuBarText() {
         todayKhmerDate = engine.today()
-        let day = calendar.component(.day, from: Date())
-        menuBarText = "ថ្ងៃទី" + KhmerNumeralService.toKhmer(day)
+        let now = Date()
+        let day = calendar.component(.day, from: now)
+        let month = calendar.component(.month, from: now)
+        let format = AppSettings.shared.menuBarFormat
+
+        switch format {
+        case .khmerNumeralOnly:
+            menuBarText = "ថ្ងៃទី" + KhmerNumeralService.toKhmer(day)
+        case .khmerAndGregorian:
+            menuBarText = KhmerNumeralService.toKhmer(day) + " / \(day)"
+        case .lunarDate:
+            menuBarText = todayKhmerDate.formattedShort
+        case .khmerFull:
+            let monthName = CalendarConstants.solarMonthNames[month - 1]
+            menuBarText = KhmerNumeralService.toKhmer(day) + " " + monthName
+        case .iconOnly:
+            menuBarText = ""
+        }
+    }
+
+    private func observeSettingsChanges() {
+        settingsObserver = NotificationCenter.default.addObserver(
+            forName: UserDefaults.didChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.updateMenuBarText()
+                self?.updateMenuBarIcon()
+            }
+        }
     }
 
     private func updateMenuBarIcon() {

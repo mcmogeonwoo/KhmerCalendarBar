@@ -1,4 +1,5 @@
 import SwiftUI
+import AppKit
 
 struct CalendarGridView: View {
     @ObservedObject var viewModel: CalendarViewModel
@@ -37,6 +38,30 @@ struct CalendarGridView: View {
                             }
                         }
                     }
+                    .contextMenu {
+                        Button("ចម្លង ថ្ងៃខ្មែរ") {
+                            copyToClipboard(dayInfo.khmerDate.formattedFull)
+                        }
+                        Button("ចម្លង ថ្ងៃសកល") {
+                            copyToClipboard(gregorianString(for: dayInfo))
+                        }
+                        Divider()
+                        Button("ចម្លង ព័ត៌មានទាំងអស់") {
+                            copyToClipboard(fullInfoString(for: dayInfo))
+                        }
+                        if !dayInfo.holidays.isEmpty {
+                            Divider()
+                            ForEach(dayInfo.holidays) { holiday in
+                                Button("ចម្លង: \(holiday.khmerName)") {
+                                    copyToClipboard(holiday.khmerName)
+                                }
+                            }
+                        }
+                        Divider()
+                        Button("កំណត់រំលឹក") {
+                            viewModel.openAddReminder(for: dayInfo)
+                        }
+                    }
                 }
             }
             .id(viewModel.monthKey)
@@ -65,5 +90,31 @@ struct CalendarGridView: View {
         if index == 0 { return theme.sunday }
         if index == 6 { return theme.saturday }
         return theme.accent.opacity(0.85)
+    }
+
+    private func copyToClipboard(_ text: String) {
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(text, forType: .string)
+    }
+
+    private func gregorianString(for dayInfo: DayInfo) -> String {
+        let fmt = DateFormatter()
+        fmt.dateStyle = .long
+        return fmt.string(from: dayInfo.gregorianDate)
+    }
+
+    private func fullInfoString(for dayInfo: DayInfo) -> String {
+        let dowIndex = dayInfo.dayOfWeek - 1
+        let weekday = CalendarConstants.weekdayNames[dowIndex]
+        var text = "ថ្ងៃ\(weekday)\n"
+        text += dayInfo.khmerDate.formattedFull + "\n"
+        text += gregorianString(for: dayInfo)
+        for holiday in dayInfo.holidays {
+            text += "\n\(holiday.khmerName)"
+            if !holiday.englishName.isEmpty {
+                text += " — \(holiday.englishName)"
+            }
+        }
+        return text
     }
 }
