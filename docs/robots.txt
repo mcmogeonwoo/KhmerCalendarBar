@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://khmercalendarbar.rithytep.online/sitemap.xml
