@@ -23,6 +23,7 @@ final class CalendarViewModel: ObservableObject {
     private let engine = ChhankitekEngine.shared
     private let calendar = Calendar.current
     private var midnightTimer: Timer?
+    private var minuteTimer: Timer?
     private var lastNotificationYear: Int?
     private var settingsObserver: Any?
 
@@ -44,6 +45,7 @@ final class CalendarViewModel: ObservableObject {
         updateMenuBarIcon()
         buildGrid()
         scheduleMidnightRefresh()
+        scheduleMinuteRefresh()
         setupNotifications(year: year)
         observeSettingsChanges()
         loadReminders()
@@ -267,20 +269,40 @@ final class CalendarViewModel: ObservableObject {
         let now = Date()
         let day = calendar.component(.day, from: now)
         let month = calendar.component(.month, from: now)
+        let hour = calendar.component(.hour, from: now)
+        let minute = calendar.component(.minute, from: now)
         let format = AppSettings.shared.menuBarFormat
+
+        let timeStr = padKhmer(hour) + ":" + padKhmer(minute)
 
         switch format {
         case .khmerNumeralOnly:
-            menuBarText = "ថ្ងៃទី" + KhmerNumeralService.toKhmer(day)
+            menuBarText = "ថ្ងៃទី" + KhmerNumeralService.toKhmer(day) + "  " + timeStr
         case .khmerAndGregorian:
-            menuBarText = KhmerNumeralService.toKhmer(day) + " / \(day)"
+            menuBarText = KhmerNumeralService.toKhmer(day) + " / \(day)" + "  " + timeStr
         case .lunarDate:
-            menuBarText = todayKhmerDate.formattedShort
+            menuBarText = todayKhmerDate.formattedShort + "  " + timeStr
         case .khmerFull:
             let monthName = CalendarConstants.solarMonthNames[month - 1]
-            menuBarText = KhmerNumeralService.toKhmer(day) + " " + monthName
+            menuBarText = KhmerNumeralService.toKhmer(day) + " " + monthName + "  " + timeStr
         case .iconOnly:
-            menuBarText = ""
+            menuBarText = timeStr
+        }
+    }
+
+    private func padKhmer(_ n: Int) -> String {
+        let padded = String(format: "%02d", n)
+        return String(padded.map { char in
+            CalendarConstants.khmerNumeralMap[char] ?? char
+        })
+    }
+
+    private func scheduleMinuteRefresh() {
+        // Fire every 30s to stay accurate within a minute
+        minuteTimer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { [weak self] _ in
+            Task { @MainActor in
+                self?.updateMenuBarText()
+            }
         }
     }
 

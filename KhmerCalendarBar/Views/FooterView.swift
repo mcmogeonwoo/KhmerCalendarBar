@@ -2,8 +2,10 @@ import SwiftUI
 
 struct FooterView: View {
     @Binding var showSettings: Bool
+    @Binding var showClock: Bool
     @State private var isQuitHovered = false
     @State private var isSettingsHovered = false
+    @State private var isClockHovered = false
     @Environment(\.calendarTheme) private var theme
 
     var body: some View {
@@ -25,6 +27,24 @@ struct FooterView: View {
             }
             .animation(.easeInOut(duration: 0.15), value: isSettingsHovered)
             .help("ការកំណត់")
+
+            Button {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                    showClock = true
+                }
+            } label: {
+                Image(systemName: "clock.fill")
+                    .font(.system(size: 12))
+                    .foregroundStyle(isClockHovered ? AnyShapeStyle(theme.accent) : AnyShapeStyle(.tertiary))
+                    .frame(width: 24, height: 24)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .onHover { hovering in
+                isClockHovered = hovering
+            }
+            .animation(.easeInOut(duration: 0.15), value: isClockHovered)
+            .help("នាឡិកា (C)")
 
             Spacer()
 

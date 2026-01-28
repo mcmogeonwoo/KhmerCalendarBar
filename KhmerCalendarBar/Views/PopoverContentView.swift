@@ -4,6 +4,7 @@ struct PopoverContentView: View {
     @ObservedObject var viewModel: CalendarViewModel
     @Environment(\.colorScheme) private var colorScheme
     @State private var showSettings = false
+    @State private var showClock = false
 
     private var theme: CalendarTheme { CalendarTheme(colorScheme: colorScheme) }
 
@@ -27,6 +28,13 @@ struct PopoverContentView: View {
                     }
                 )
                 .transition(.move(edge: .trailing).combined(with: .opacity))
+            } else if showClock {
+                ClockView(onBack: {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                        showClock = false
+                    }
+                })
+                .transition(.move(edge: .trailing).combined(with: .opacity))
             } else if showSettings {
                 SettingsView(showSettings: $showSettings, viewModel: viewModel)
                     .transition(.move(edge: .trailing).combined(with: .opacity))
@@ -38,6 +46,7 @@ struct PopoverContentView: View {
         .padding(8)
         .environment(\.calendarTheme, CalendarTheme(colorScheme: colorScheme))
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: showSettings)
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: showClock)
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.showAddReminder)
         .animation(.spring(response: 0.3, dampingFraction: 0.85), value: viewModel.selectedDayInfo?.id)
         .animation(.spring(response: 0.35, dampingFraction: 0.85), value: viewModel.monthKey)
@@ -46,21 +55,21 @@ struct PopoverContentView: View {
             viewModel.goToToday()
         }
         .onKeyPress(.leftArrow) {
-            guard !showSettings else { return .ignored }
+            guard !showSettings && !showClock else { return .ignored }
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 viewModel.navigateMonth(offset: -1)
             }
             return .handled
         }
         .onKeyPress(.rightArrow) {
-            guard !showSettings else { return .ignored }
+            guard !showSettings && !showClock else { return .ignored }
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 viewModel.navigateMonth(offset: 1)
             }
             return .handled
         }
         .onKeyPress(characters: CharacterSet(charactersIn: "tT")) { _ in
-            guard !showSettings else { return .ignored }
+            guard !showSettings && !showClock else { return .ignored }
             withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
                 viewModel.goToToday()
                 viewModel.selectedDayInfo = nil
@@ -72,6 +81,8 @@ struct PopoverContentView: View {
                 if viewModel.showAddReminder {
                     viewModel.showAddReminder = false
                     viewModel.reminderTargetDay = nil
+                } else if showClock {
+                    showClock = false
                 } else if showSettings {
                     showSettings = false
                 } else if viewModel.viewMode == .year {
@@ -83,9 +94,16 @@ struct PopoverContentView: View {
             return .handled
         }
         .onKeyPress(characters: CharacterSet(charactersIn: "yY")) { _ in
-            guard !showSettings else { return .ignored }
+            guard !showSettings && !showClock else { return .ignored }
             withAnimation(.spring(response: 0.3, dampingFraction: 0.85)) {
                 viewModel.viewMode = viewModel.viewMode == .month ? .year : .month
+            }
+            return .handled
+        }
+        .onKeyPress(characters: CharacterSet(charactersIn: "cC")) { _ in
+            guard !showSettings else { return .ignored }
+            withAnimation(.spring(response: 0.35, dampingFraction: 0.85)) {
+                showClock.toggle()
             }
             return .handled
         }
@@ -165,7 +183,7 @@ struct PopoverContentView: View {
             .padding(.top, 8)
 
         // Footer
-        FooterView(showSettings: $showSettings)
+        FooterView(showSettings: $showSettings, showClock: $showClock)
             .padding(.horizontal, 8)
             .padding(.vertical, 8)
     }
